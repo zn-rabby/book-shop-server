@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import AppError from '../../errors/AppError';
 import { IUser } from './user.interface';
 import User from './user.model';
+import config from '../../config';
+import jwt from 'jsonwebtoken';
 
 const register = async (payload: IUser) => {
   const user = await User.isUserExists(payload.email);
@@ -15,7 +17,6 @@ const register = async (payload: IUser) => {
 };
 
 const login = async (payload: { email: string; password: string }) => {
-  // Find the user by email and select password
   const user = await User.findOne({ email: payload?.email }).select(
     '+password',
   );
@@ -30,7 +31,7 @@ const login = async (payload: { email: string; password: string }) => {
     throw new AppError(403, 'Your account has been blocked.');
   }
 
-  // Checking if the password is correct
+  //checking if the password is correct
   const isPasswordMatched = await bcrypt.compare(
     payload?.password,
     user?.password,
@@ -40,8 +41,22 @@ const login = async (payload: { email: string; password: string }) => {
     throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials');
   }
 
-  // No JWT token is created, just return the user object
-  return { user };
+  //create token and sent to the  client
+  const jwtPayload = {
+    email: user?.email,
+    role: user?.role,
+  };
+
+  // const token = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+  //   expiresIn: '30d',
+  // });
+  const token = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: '30d',
+  });
+
+  // jwt.verify(token, config.jwt_access_secret as string); // Ensure this matches
+
+  return { token, user };
 };
 
 export const userService = {
