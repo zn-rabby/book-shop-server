@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { userController } from './user.controller';
+import validateRequest from '../../middleware/validateRequest';
+import { UserValidation } from './user.validation';
 const userRoutes = Router();
 
 userRoutes.post(
   '/register',
-  //   validateRequest(UserValidation.registerUserValidationSchema),
+  validateRequest(UserValidation.registerUserValidationSchema),
   userController.register,
 );
 
