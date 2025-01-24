@@ -16,6 +16,18 @@ const register = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const login = catchAsync(async (req: Request, res: Response) => {
+  const result = await userService.login(req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User logged in successfully',
+    data: result,
+  });
+});
+
 export const userController = {
   register,
+  login,
 };
