@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 import { Model } from 'mongoose';
 import { USER_ROLE } from './user.constant';
 
 export interface IUser extends Document {
-  _id: Types.ObjectId;
+  // _id: Types.ObjectId;
   name: string;
   email: string;
   password: string;
-  role: 'admin' | 'user';
-  isBlocked: boolean;
+  role?: 'admin' | 'user';
+  status?: 'active' | 'block';
 }
 
 export interface UserModel extends Model<IUser> {

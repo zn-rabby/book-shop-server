@@ -5,6 +5,8 @@ import { IUser } from './user.interface';
 import User from './user.model';
 import config from '../../config';
 import jwt from 'jsonwebtoken';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { userSearchableFields } from './user.constant';
 
 const register = async (payload: IUser) => {
   const user = await User.isUserExists(payload.email);
@@ -25,9 +27,9 @@ const login = async (payload: { email: string; password: string }) => {
     throw new AppError(404, 'User is not found!');
   }
 
-  const isBlocked = user.isBlocked; // Assuming isBlocked is boolean
+  const isStatus = user.status; // Assuming isBlocked is boolean
 
-  if (isBlocked) {
+  if (isStatus == 'block') {
     throw new AppError(403, 'Your account has been blocked.');
   }
 
@@ -59,7 +61,90 @@ const login = async (payload: { email: string; password: string }) => {
   return { token, user };
 };
 
+const getAllUsers = async (query: Record<string, unknown>) => {
+  const studentQuery = new QueryBuilder(User.find(), query)
+    .search(userSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const meta = await studentQuery.countTotal();
+  const result = await studentQuery.modelQuery;
+
+  return {
+    meta,
+    result,
+  };
+};
+
+const getSingleUsers = async (id: string) => {
+  const user = await User.findById(id);
+
+  return user;
+};
+
+const userRoleUpdate = async (userId: string, payload: Partial<IUser>) => {
+  // check user is exits
+  const user = await User.findOne({ _id: userId });
+
+  if (!user) {
+    throw new AppError(404, 'User not found!');
+  }
+
+  if (user?.role !== 'user') {
+    throw new AppError(403, 'Only user roles can be blocked!');
+  }
+
+  const result = await User.findByIdAndUpdate(userId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
+const userStatusUpdate = async (userId: string, payload: Partial<IUser>) => {
+  // check user is exits
+  const user = await User.findOne({ _id: userId });
+
+  if (!user) {
+    throw new AppError(404, 'User not found!');
+  }
+
+  if (user?.role !== 'user') {
+    throw new AppError(403, 'Only user roles can be blocked!');
+  }
+
+  const result = await User.findByIdAndUpdate(userId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
+
+const userUpdate = async (userId: string, payload: Partial<IUser>) => {
+  // check user is exits
+  const user = await User.findOne({ _id: userId });
+
+  if (!user) {
+    throw new AppError(404, 'User not found!');
+  }
+
+  const result = await User.findByIdAndUpdate(userId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
+
 export const userService = {
   register,
   login,
+  getAllUsers,
+  getSingleUsers,
+  userRoleUpdate,
+  userStatusUpdate,
+  userUpdate,
 };
