@@ -78,6 +78,12 @@ const getAllUsers = async (query: Record<string, unknown>) => {
   };
 };
 
+const getSingleUsers = async (id: string) => {
+  const user = await User.findById(id);
+
+  return user;
+};
+
 const userRoleUpdate = async (userId: string, payload: Partial<IUser>) => {
   // check user is exits
   const user = await User.findOne({ _id: userId });
@@ -137,6 +143,7 @@ export const userService = {
   register,
   login,
   getAllUsers,
+  getSingleUsers,
   userRoleUpdate,
   userStatusUpdate,
   userUpdate,

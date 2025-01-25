@@ -39,6 +39,17 @@ const getAllUsers: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleUsers = catchAsync(async (req, res) => {
+  const user = await userService.getSingleUsers(req.params.userId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: 'User Retrieved Successfully',
+    data: user,
+  });
+});
+
 const userRoleUpdate = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const updatedData = req.body;
@@ -82,6 +93,7 @@ export const userController = {
   register,
   login,
   getAllUsers,
+  getSingleUsers,
   userRoleUpdate,
   userStatusUpdate,
   userUpdate,
