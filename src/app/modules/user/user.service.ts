@@ -25,9 +25,9 @@ const login = async (payload: { email: string; password: string }) => {
     throw new AppError(404, 'User is not found!');
   }
 
-  const isBlocked = user.isBlocked; // Assuming isBlocked is boolean
+  const isStatus = user.status; // Assuming isBlocked is boolean
 
-  if (isBlocked) {
+  if (isStatus == 'block') {
     throw new AppError(403, 'Your account has been blocked.');
   }
 
@@ -59,7 +59,28 @@ const login = async (payload: { email: string; password: string }) => {
   return { token, user };
 };
 
+const userRoleUpdate = async (userId: string, payload: Partial<IUser>) => {
+  // check user is exits
+  const user = await User.findOne({ _id: userId });
+
+  if (!user) {
+    throw new AppError(404, 'User not found!');
+  }
+
+  if (user?.role !== 'user') {
+    throw new AppError(403, 'Only user roles can be blocked!');
+  }
+
+  const result = await User.findByIdAndUpdate(userId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
+
 export const userService = {
   register,
   login,
+  userRoleUpdate,
 };

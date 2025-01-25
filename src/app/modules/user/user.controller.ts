@@ -27,7 +27,21 @@ const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const userRoleUpdate = catchAsync(async (req, res) => {
+  const userId = req.params.userId;
+  const updatedData = req.body;
+
+  await userService.userRoleUpdate(userId, updatedData);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User Role Update successfully',
+    data: {},
+  });
+});
+
 export const userController = {
   register,
   login,
+  userRoleUpdate,
 };

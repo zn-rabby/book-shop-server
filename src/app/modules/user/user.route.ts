@@ -16,5 +16,6 @@ userRoutes.post(
   userController.login,
 );
 
+userRoutes.patch('/role/:userId', userController.userRoleUpdate);
 
 export default userRoutes;
