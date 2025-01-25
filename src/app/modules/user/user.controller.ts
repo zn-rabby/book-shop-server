@@ -1,31 +1,7 @@
-import { StatusCodes } from 'http-status-codes';
 import { userService } from './user.service';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-import { Request, RequestHandler, Response } from 'express';
-
-const register = catchAsync(async (req: Request, res: Response) => {
-  const result = await userService.register(req.body);
-  // const { _id, name, email } = result;
-
-  sendResponse(res, {
-    statusCode: StatusCodes.CREATED,
-    success: true,
-    message: 'User registered successfully',
-    data: result,
-  });
-});
-
-const login = catchAsync(async (req: Request, res: Response) => {
-  const result = await userService.login(req.body);
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'User logged in successfully',
-    data: result,
-  });
-});
+import { RequestHandler } from 'express';
 
 const getAllUsers: RequestHandler = catchAsync(async (req, res) => {
   const result = await userService.getAllUsers(req.query);
@@ -89,12 +65,22 @@ const userUpdate = catchAsync(async (req, res) => {
   });
 });
 
+const deleteUser = catchAsync(async (req, res) => {
+  const userId = req.params.userId;
+  await userService.deleteUser(userId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'user deleted successfully',
+    data: {},
+  });
+});
 export const userController = {
-  register,
-  login,
   getAllUsers,
   getSingleUsers,
   userRoleUpdate,
   userStatusUpdate,
   userUpdate,
+  deleteUser,
 };

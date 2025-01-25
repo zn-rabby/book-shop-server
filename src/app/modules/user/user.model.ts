@@ -65,6 +65,18 @@ userSchema.statics.isPasswordMatch = async function (
 ) {
   return await bcrypt.compare(plainTextPassword, hashPassword);
 };
+// function excludeDeleteQuery(next: Function) {
+//   this.where({ isDeleted: { $ne: true } });
+//   next();
+// }
+// function excludeDeleteAggregation(next: Function) {
+//   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+//   next();
+// }
+
+// userSchema.pre('find', excludeDeleteQuery);
+// userSchema.pre('findOne', excludeDeleteQuery);
+// userSchema.pre('aggregate', excludeDeleteAggregation);
 
 const User = model<IUser, UserModel>('User', userSchema);
 export default User;
