@@ -33,9 +33,13 @@ const userSchema = new Schema<IUser>(
       },
       default: 'user',
     },
-    isBlocked: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      enum: {
+        values: ['active', 'block'],
+        message: '{VALUE} is not valid, please provide a valid status',
+      },
+      default: 'active',
     },
   },
   {
