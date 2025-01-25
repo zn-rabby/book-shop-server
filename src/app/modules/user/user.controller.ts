@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { userService } from './user.service';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-import { Request, Response } from 'express';
+import { Request, RequestHandler, Response } from 'express';
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const result = await userService.register(req.body);
@@ -27,6 +27,18 @@ const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllUsers: RequestHandler = catchAsync(async (req, res) => {
+  const result = await userService.getAllUsers(req.query);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Student are retrieved successfully',
+    meta: result.meta,
+    data: result.result,
+  });
+});
+
 const userRoleUpdate = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const updatedData = req.body;
@@ -39,6 +51,7 @@ const userRoleUpdate = catchAsync(async (req, res) => {
     data: {},
   });
 });
+
 const userStatusUpdate = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const updatedData = req.body;
@@ -47,10 +60,11 @@ const userStatusUpdate = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'User Role Update successfully',
+    message: 'User Status Update successfully',
     data: {},
   });
 });
+
 const userUpdate = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const updatedData = req.body;
@@ -67,6 +81,7 @@ const userUpdate = catchAsync(async (req, res) => {
 export const userController = {
   register,
   login,
+  getAllUsers,
   userRoleUpdate,
   userStatusUpdate,
   userUpdate,

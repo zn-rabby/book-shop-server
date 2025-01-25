@@ -5,6 +5,8 @@ import { IUser } from './user.interface';
 import User from './user.model';
 import config from '../../config';
 import jwt from 'jsonwebtoken';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { userSearchableFields } from './user.constant';
 
 const register = async (payload: IUser) => {
   const user = await User.isUserExists(payload.email);
@@ -57,6 +59,23 @@ const login = async (payload: { email: string; password: string }) => {
   // jwt.verify(token, config.jwt_access_secret as string); // Ensure this matches
 
   return { token, user };
+};
+
+const getAllUsers = async (query: Record<string, unknown>) => {
+  const studentQuery = new QueryBuilder(User.find(), query)
+    .search(userSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const meta = await studentQuery.countTotal();
+  const result = await studentQuery.modelQuery;
+
+  return {
+    meta,
+    result,
+  };
 };
 
 const userRoleUpdate = async (userId: string, payload: Partial<IUser>) => {
@@ -117,6 +136,7 @@ const userUpdate = async (userId: string, payload: Partial<IUser>) => {
 export const userService = {
   register,
   login,
+  getAllUsers,
   userRoleUpdate,
   userStatusUpdate,
   userUpdate,

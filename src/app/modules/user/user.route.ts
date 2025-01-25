@@ -16,8 +16,12 @@ userRoutes.post(
   userController.login,
 );
 
+userRoutes.get('/users', userController.getAllUsers);
+
 userRoutes.patch('/role/:userId', userController.userRoleUpdate);
+
 userRoutes.patch('/status/:userId', userController.userStatusUpdate);
+
 userRoutes.patch('/update/:userId', userController.userUpdate);
 
 export default userRoutes;
