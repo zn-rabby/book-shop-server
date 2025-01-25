@@ -39,9 +39,35 @@ const userRoleUpdate = catchAsync(async (req, res) => {
     data: {},
   });
 });
+const userStatusUpdate = catchAsync(async (req, res) => {
+  const userId = req.params.userId;
+  const updatedData = req.body;
+
+  await userService.userStatusUpdate(userId, updatedData);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User Role Update successfully',
+    data: {},
+  });
+});
+const userUpdate = catchAsync(async (req, res) => {
+  const userId = req.params.userId;
+  const updatedData = req.body;
+
+  await userService.userUpdate(userId, updatedData);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User Update successfully',
+    data: {},
+  });
+});
 
 export const userController = {
   register,
   login,
   userRoleUpdate,
+  userStatusUpdate,
+  userUpdate,
 };

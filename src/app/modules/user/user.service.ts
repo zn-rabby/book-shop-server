@@ -78,9 +78,46 @@ const userRoleUpdate = async (userId: string, payload: Partial<IUser>) => {
 
   return result;
 };
+const userStatusUpdate = async (userId: string, payload: Partial<IUser>) => {
+  // check user is exits
+  const user = await User.findOne({ _id: userId });
+
+  if (!user) {
+    throw new AppError(404, 'User not found!');
+  }
+
+  if (user?.role !== 'user') {
+    throw new AppError(403, 'Only user roles can be blocked!');
+  }
+
+  const result = await User.findByIdAndUpdate(userId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
+
+const userUpdate = async (userId: string, payload: Partial<IUser>) => {
+  // check user is exits
+  const user = await User.findOne({ _id: userId });
+
+  if (!user) {
+    throw new AppError(404, 'User not found!');
+  }
+
+  const result = await User.findByIdAndUpdate(userId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
 
 export const userService = {
   register,
   login,
   userRoleUpdate,
+  userStatusUpdate,
+  userUpdate,
 };
