@@ -29,6 +29,17 @@ const getAllProduct = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleProduct = catchAsync(async (req, res) => {
+  const user = await productService.getSingleProduct(req.params.id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: 'User Retrieved Successfully',
+    data: user,
+  });
+});
+
 const updateProduct = catchAsync(async (req, res) => {
   const id = req.params.id;
   const updatedData = req.body;
@@ -71,7 +82,8 @@ const deleteProduct = catchAsync(async (req, res) => {
 
 export const productController = {
   createProduct,
+  getAllProduct,
+  getSingleProduct,
   updateProduct,
   deleteProduct,
-  getAllProduct,
 };

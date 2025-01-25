@@ -38,6 +38,12 @@ const getAllProduct = async (query: Record<string, unknown>) => {
   return result;
 };
 
+const getSingleProduct = async (id: string) => {
+  const user = await Product.findById(id);
+
+  return user;
+};
+
 const updateProduct = async (
   id: string,
   userEmail: string,
@@ -90,9 +96,9 @@ const deleteProduct = async (id: string, userEmail: string) => {
   }
 
   // check owner
-//   if (product._id.toString() !== product?.author.toString()) {
-//     throw new AppError(401, 'You are not authorized to delete this blog!');
-//   }
+  //   if (product._id.toString() !== product?.author.toString()) {
+  //     throw new AppError(401, 'You are not authorized to delete this blog!');
+  //   }
 
   const result = await Product.findByIdAndDelete(id, { isDeleted: true });
 
@@ -101,7 +107,8 @@ const deleteProduct = async (id: string, userEmail: string) => {
 
 export const productService = {
   createProduct,
+  getAllProduct,
+  getSingleProduct,
   updateProduct,
   deleteProduct,
-  getAllProduct,
 };
