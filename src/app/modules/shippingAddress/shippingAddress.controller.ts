@@ -42,10 +42,39 @@ const getSingleShippingAddress = catchAsync(async (req, res) => {
   });
 });
 
+const updateShippingAddress = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const updatedData = req.body;
+
+    const result = await shippingService.updateShippingAddress(id, updatedData);
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Shipping Address updated successfully',
+      data: result,
+    });
+  },
+);
+
+const deleteShippingAddress = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  // const userEmail = req?.user?.email;
+  await shippingService.deleteShippingAddress(id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Shipping Address deleted successfully',
+    data: {},
+  });
+});
+
 export const shippingController = {
   createShippingAddress,
   getAllShippingAddress,
   getSingleShippingAddress,
-  //   updateProduct,
-  //   deleteProduct,
+  updateShippingAddress,
+  deleteShippingAddress,
 };

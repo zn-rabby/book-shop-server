@@ -15,8 +15,8 @@ shippingRouters.get('/', shippingController.getAllShippingAddress);
 
 shippingRouters.get('/:id', shippingController.getSingleShippingAddress);
 
-// shippingRouters.patch('/:id', productController.updateProduct);
+shippingRouters.patch('/:id', shippingController.updateShippingAddress);
 
-// shippingRouters.delete('/:id', productController.deleteProduct);
+shippingRouters.delete('/:id', shippingController.deleteShippingAddress);
 
 export default shippingRouters;
