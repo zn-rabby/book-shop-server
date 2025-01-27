@@ -1,5 +1,6 @@
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
+import Product from '../product/product.model';
 import { orderSearchableFields } from './order.constant';
 import { TOrder } from './order.interface';
 import { Order } from './order.model';
@@ -15,7 +16,38 @@ const createOrder = async (payload: TOrder) => {
 
   //   const result = await Product.create(productData);
   //   return result;
-  const result = await Order.create(payload);
+
+  const { product: productId, quantity } = payload;
+
+  // Fetch the product to check inventory
+  const product = await Product.findById(productId);
+  if (!product) {
+    return {
+      status: false,
+      message: 'Product not found',
+    };
+  }
+
+  // Check if sufficient stock is available
+  if (product.quantity < quantity) {
+    return {
+      status: false,
+      message: 'Insufficient stock for this product',
+    };
+  }
+  await Order.findByIdAndUpdate(
+    product,
+    {
+      $inc: { quantity: quantity },
+      $set: { inStock: product.quantity - quantity > 0 },
+    },
+    { new: true },
+  );
+  const totalAmount = product.price * quantity;
+  //   console.log(totalAmount);
+  const updatedData = { ...payload, totalAmount };
+  const result = await Order.create(updatedData);
+
   return result;
 };
 
