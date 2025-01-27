@@ -62,7 +62,7 @@ const getAllOrder = async (query: Record<string, unknown>) => {
 
   const result = await blogQuery.modelQuery;
 
-  // check no blogs found
+  // check no product found
   if (!result.length) {
     throw new AppError(404, 'No product found!');
   }
@@ -76,22 +76,12 @@ const getSingleOrder = async (id: string) => {
 };
 
 const updateOrder = async (id: string, payload: Partial<TOrder>) => {
-  // check blog is exists
+
   const order = await Order.findById({ _id: id });
 
   if (!order) {
     throw new AppError(404, 'Blog not found! You cannot update it.');
   }
-
-  // check the owner
-
-  //   if (product.author.toString() !== user._id.toString()) {
-  //     throw new AppError(
-  //       403,
-  //       'You are not the owner of this blog and cannot update it.',
-  //     );
-  //   }
-
   const result = await Order.findByIdAndUpdate(id, payload, {
     new: true,
     runValidators: true,
@@ -101,24 +91,11 @@ const updateOrder = async (id: string, payload: Partial<TOrder>) => {
 };
 
 const deleteOrder = async (id: string) => {
-  // check user is exists
-  // const user = await User.isUserExists(userEmail);
-
-  // if (!user) {
-  //   throw new AppError(403, 'User not found! You cannot delete the blog.');
-  // }
-
-  // check blog is exists
   const order = await Order.findById(id);
 
   if (!order) {
-    throw new AppError(404, 'product not found!');
+    throw new AppError(404, 'Order not found!');
   }
-
-  // check owner
-  //   if (product._id.toString() !== product?.author.toString()) {
-  //     throw new AppError(401, 'You are not authorized to delete this blog!');
-  //   }
 
   const result = await Order.findByIdAndDelete(id, { isDeleted: true });
 
