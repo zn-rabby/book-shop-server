@@ -38,7 +38,13 @@ const getAllOrder = async (query: Record<string, unknown>) => {
   return result;
 };
 
+const getSingleOrder = async (id: string) => {
+  const user = await Order.findById(id);
+  return user;
+};
+
 export const orderService = {
   createOrder,
   getAllOrder,
+  getSingleOrder,
 };

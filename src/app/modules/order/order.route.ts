@@ -11,7 +11,7 @@ orderRouters.post(
 
 orderRouters.get('/', orderController.getAllOrder);
 
-// productRouters.get('/:id', productController.getSingleProduct);
+orderRouters.get('/:id', orderController.getSingleOrder);
 
 // productRouters.patch('/:id', productController.updateProduct);
 
