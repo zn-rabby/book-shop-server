@@ -26,20 +26,13 @@ const productValidationSchema = z.object({
     price: z.number().min(0, 'Price must be a positive number'),
     image: z.string().url('Image must be a valid URL'),
     publisher: z.string().nonempty('Publisher is required'),
-    publishedDate: z
-      .string()
-      .transform((val) => new Date(val))
-      .refine((date) => !isNaN(date.getTime()), {
-        message: 'Invalid date format',
-      })
-      .optional(),
+    publishedDate: z.string().optional(),
     language: z.string().nonempty('Language is required'),
     pages: z.number().min(1, 'Pages must be at least 1'),
-    rating: z.number().min(0).max(5, 'Rating must be between 0 and 5'),
-    quantity: z.number().min(0, 'Quantity must be a positive number'),
+    rating: z.number().int().min(1).max(5, 'Rating must be between 0 and 5'),
+    quantity: z.number().int().min(0, 'Quantity must be a positive number'),
     isDeleted: z.boolean().default(false),
-    stockStatus: z.enum(['inStock', 'outOfStock']),
-    discount: z.number().min(0).max(100).optional(),
+    discount: z.number().int().min(0).max(100).optional(),
   }),
 });
 

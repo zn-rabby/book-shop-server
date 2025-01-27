@@ -17,11 +17,7 @@ const ProductSchema: Schema = new Schema(
     quantity: { type: Number, required: true },
     isDeleted: { type: Boolean, required: true, default: false },
     discount: { type: Number, default: 0 },
-    stockStatus: {
-      type: String,
-      enum: ['inStock', 'outOfStock'],
-      required: true,
-    },
+ 
   },
   { timestamps: true }, // Automatically add createdAt and updatedAt fields
 );

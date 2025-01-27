@@ -44,20 +44,9 @@ const getSingleProduct = async (id: string) => {
   return user;
 };
 
-const updateProduct = async (
-  id: string,
-  userEmail: string,
-  payload: Partial<TProduct>,
-) => {
-  // check user is exists
-  const user = await User.isUserExists(userEmail);
-
-  if (!user) {
-    throw new AppError(403, 'User not found! You cannot update the blog.');
-  }
-
+const updateProduct = async (id: string, payload: Partial<TProduct>) => {
   // check blog is exists
-  const product = await Product.findById(id);
+  const product = await Product.findById({ _id: id });
 
   if (!product) {
     throw new AppError(404, 'Blog not found! You cannot update it.');

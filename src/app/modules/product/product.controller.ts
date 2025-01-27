@@ -43,9 +43,9 @@ const getSingleProduct = catchAsync(async (req, res) => {
 const updateProduct = catchAsync(async (req, res) => {
   const id = req.params.id;
   const updatedData = req.body;
-  const userEmail = req?.user?.email;
+  // const userEmail = req?.user?.email;
 
-  const result = await productService.updateProduct(id, userEmail, updatedData);
+  const result = await productService.updateProduct(id, updatedData);
 
   sendResponse(res, {
     statusCode: 200,

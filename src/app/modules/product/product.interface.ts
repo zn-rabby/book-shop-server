@@ -13,5 +13,4 @@ export interface TProduct {
     quantity: number;
     isDeleted: boolean;
     discount?: number;
-    stockStatus: 'inStock' | 'outOfStock';
 }
