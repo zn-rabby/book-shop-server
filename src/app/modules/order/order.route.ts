@@ -13,7 +13,7 @@ orderRouters.get('/', orderController.getAllOrder);
 
 orderRouters.get('/:id', orderController.getSingleOrder);
 
-// productRouters.patch('/:id', productController.updateProduct);
+orderRouters.patch('/:id', orderController.updateOrder);
 
 // productRouters.delete('/:id', productController.deleteProduct);
 

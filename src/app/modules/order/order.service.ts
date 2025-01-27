@@ -43,8 +43,34 @@ const getSingleOrder = async (id: string) => {
   return user;
 };
 
+const updateOrder = async (id: string, payload: Partial<TOrder>) => {
+  // check blog is exists
+  const product = await Order.findById({ _id: id });
+
+  if (!product) {
+    throw new AppError(404, 'Blog not found! You cannot update it.');
+  }
+
+  // check the owner
+
+  //   if (product.author.toString() !== user._id.toString()) {
+  //     throw new AppError(
+  //       403,
+  //       'You are not the owner of this blog and cannot update it.',
+  //     );
+  //   }
+
+  const result = await Order.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
+
 export const orderService = {
   createOrder,
   getAllOrder,
   getSingleOrder,
+  updateOrder,
 };
