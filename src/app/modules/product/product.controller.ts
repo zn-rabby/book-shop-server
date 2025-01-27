@@ -4,9 +4,6 @@ import sendResponse from '../../utils/sendResponse';
 import { productService } from './product.service';
 
 const createProduct = catchAsync(async (req: Request, res: Response) => {
-  //   const userEmail = req?.user?.email;
-
-  //   const result = await productService.createProduct(req.body, userEmail);
   const result = await productService.createProduct(req.body);
 
   sendResponse(res, {
@@ -35,7 +32,7 @@ const getSingleProduct = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: 200,
-    message: 'User Retrieved Successfully',
+    message: 'Product Retrieved Successfully',
     data: user,
   });
 });
@@ -43,7 +40,6 @@ const getSingleProduct = catchAsync(async (req, res) => {
 const updateProduct = catchAsync(async (req, res) => {
   const id = req.params.id;
   const updatedData = req.body;
-  // const userEmail = req?.user?.email;
 
   const result = await productService.updateProduct(id, updatedData);
 
@@ -55,21 +51,8 @@ const updateProduct = catchAsync(async (req, res) => {
   });
 });
 
-// const deleteBlog = catchAsync(async (req, res) => {
-//   const id = req.params.id;
-//   await blogService.deleteBlog(id);
-
-//   sendResponse(res, {
-//     statusCode: 200,
-//     success: true,
-//     message: 'Blog deleted successfully',
-//     data: {},
-//   });
-// });
-
 const deleteProduct = catchAsync(async (req, res) => {
   const id = req.params.id;
-  // const userEmail = req?.user?.email;
   await productService.deleteProduct(id);
 
   sendResponse(res, {
