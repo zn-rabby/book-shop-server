@@ -19,10 +19,10 @@ const ProductSchema: Schema = new Schema(
     discount: { type: Number, default: 0 },
  
   },
-  { timestamps: true }, // Automatically add createdAt and updatedAt fields
+  { timestamps: true }, 
 );
 
-// Create and export the model
+
 const Product = mongoose.model<TProduct>('Product', ProductSchema);
 
 export default Product;
