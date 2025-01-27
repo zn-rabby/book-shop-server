@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { TProduct } from './product.interface';
-// Define the Mongoose schema for TProduct
+
+
 const ProductSchema: Schema = new Schema(
   {
     title: { type: String, required: true },

@@ -1,23 +1,6 @@
 import { z } from 'zod';
 
-// const productValidationSchem = z.object({
-//   title: z.string().nonempty('Title is required'),
-//   category: z.string().nonempty('Category is required'),
-//   author: z.string().nonempty('Author is required'),
-//   description: z.string().nonempty('Description is required'),
-//   price: z.number().min(0, 'Price must be a positive number'),
-//   image: z.string().url('Image must be a valid URL'),
-//   publisher: z.string().nonempty('Publisher is required'),
-//   publishedDate: z.date(),
-//   language: z.string().nonempty('Language is required'),
-//   pages: z.number().min(1, 'Pages must be at least 1'),
-//   rating: z.number().min(0).max(5, 'Rating must be between 0 and 5'),
-//   quantity: z.number().min(0, 'Quantity must be a positive number'),
-//   isDeleted: z.boolean().default(false),
-//   stockStatus: z.enum(['inStock', 'outOfStock']),
-//   discount: z.number().min(0).max(100).optional(),
-// });
-const productValidationSchema = z.object({
+const createProductValidationSchema = z.object({
   body: z.object({
     title: z.string().nonempty('Title is required'),
     category: z.string().nonempty('Category is required'),
@@ -36,6 +19,35 @@ const productValidationSchema = z.object({
   }),
 });
 
+const updateProductValidationSchema = z.object({
+  body: z.object({
+    title: z.string().nonempty('Title is required').optional(),
+    category: z.string().nonempty('Category is required').optional(),
+    author: z.string().nonempty('Author is required').optional(),
+    description: z.string().nonempty('Description is required').optional(),
+    price: z.number().min(0, 'Price must be a positive number').optional(),
+    image: z.string().url('Image must be a valid URL').optional(),
+    publisher: z.string().nonempty('Publisher is required').optional(),
+    publishedDate: z.string().optional(),
+    language: z.string().nonempty('Language is required').optional(),
+    pages: z.number().min(1, 'Pages must be at least 1').optional(),
+    rating: z
+      .number()
+      .int()
+      .min(1)
+      .max(5, 'Rating must be between 0 and 5')
+      .optional(),
+    quantity: z
+      .number()
+      .int()
+      .min(0, 'Quantity must be a positive number')
+      .optional(),
+    isDeleted: z.boolean().default(false).optional(),
+    discount: z.number().int().min(0).max(100).optional(),
+  }),
+});
+
 export const ProductValidation = {
-  productValidationSchema,
+  createProductValidationSchema,
+  updateProductValidationSchema,
 };

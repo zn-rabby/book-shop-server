@@ -7,7 +7,7 @@ const productRouters = Router();
 
 productRouters.post(
   '/',
-  validateRequest(ProductValidation.productValidationSchema),
+  validateRequest(ProductValidation.createProductValidationSchema),
   productController.createProduct,
 );
 
@@ -15,7 +15,11 @@ productRouters.get('/', productController.getAllProduct);
 
 productRouters.get('/:id', productController.getSingleProduct);
 
-productRouters.patch('/:id', productController.updateProduct);
+productRouters.patch(
+  '/:id',
+  validateRequest(ProductValidation.updateProductValidationSchema),
+  productController.updateProduct,
+);
 
 productRouters.delete('/:id', productController.deleteProduct);
 
