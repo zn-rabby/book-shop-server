@@ -19,9 +19,21 @@ const createShippingAddress = catchAsync(
   },
 );
 
+const getAllShippingAddress = catchAsync(async (req, res) => {
+  const query = req.query;
+  const result = await shippingService.getAllShippingAddress(query);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Shipping Address fetched successfully',
+    data: result,
+  });
+});
+
 export const shippingController = {
   createShippingAddress,
-  //   getAllProduct,
+  getAllShippingAddress,
   //   getSingleProduct,
   //   updateProduct,
   //   deleteProduct,

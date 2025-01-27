@@ -1,10 +1,7 @@
 import { Router } from 'express';
-// import { productController } from './product.controller';
 import { shippingController } from './shippingAddress.controller';
 import validateRequest from '../../middleware/validateRequest';
 import { ShippingAddressValidation } from './shippingAddress.validation';
-// import validateRequest from '../../middleware/validateRequest';
-// import { ProductValidation } from './product.validation';
 
 const shippingRouters = Router();
 
@@ -14,7 +11,7 @@ shippingRouters.post(
   shippingController.createShippingAddress,
 );
 
-// shippingRouters.get('/', productController.getAllProduct);
+shippingRouters.get('/', shippingController.getAllShippingAddress);
 
 // shippingRouters.get('/:id', productController.getSingleProduct);
 
