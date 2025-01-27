@@ -9,7 +9,7 @@ orderRouters.post(
   orderController.createOrder,
 );
 
-// productRouters.get('/', productController.getAllProduct);
+orderRouters.get('/', orderController.getAllOrder);
 
 // productRouters.get('/:id', productController.getSingleProduct);
 
