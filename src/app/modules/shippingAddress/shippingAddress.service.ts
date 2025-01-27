@@ -37,7 +37,14 @@ const getAllShippingAddress = async (query: Record<string, unknown>) => {
   return result;
 };
 
+const getSingleShippingAddress = async (id: string) => {
+  const user = await ShippingAddress.findById(id);
+
+  return user;
+};
+
 export const shippingService = {
   createShippingAddress,
   getAllShippingAddress,
+  getSingleShippingAddress,
 };

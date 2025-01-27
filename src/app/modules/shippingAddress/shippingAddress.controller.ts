@@ -31,10 +31,21 @@ const getAllShippingAddress = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleShippingAddress = catchAsync(async (req, res) => {
+  const user = await shippingService.getSingleShippingAddress(req.params.id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: 'Shipping Address Retrieved Successfully',
+    data: user,
+  });
+});
+
 export const shippingController = {
   createShippingAddress,
   getAllShippingAddress,
-  //   getSingleProduct,
+  getSingleShippingAddress,
   //   updateProduct,
   //   deleteProduct,
 };

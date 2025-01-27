@@ -13,7 +13,7 @@ shippingRouters.post(
 
 shippingRouters.get('/', shippingController.getAllShippingAddress);
 
-// shippingRouters.get('/:id', productController.getSingleProduct);
+shippingRouters.get('/:id', shippingController.getSingleShippingAddress);
 
 // shippingRouters.patch('/:id', productController.updateProduct);
 
