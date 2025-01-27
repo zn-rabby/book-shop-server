@@ -18,8 +18,10 @@ const auth = (...requiredRoles: IUserRole[]) => {
     const token = authHeader.split(' ')[1];
     // checking if the token is missing
     if (!token) {
-      // throw new Error('You are not authorized!');
-      throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials');
+      throw new AppError(
+        StatusCodes.UNAUTHORIZED,
+        'No authentication token provided. Please login to access this resource.',
+      );
     }
 
     // checking if the given token is valid
@@ -39,10 +41,9 @@ const auth = (...requiredRoles: IUserRole[]) => {
       throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials');
     }
 
-    // checking if the user is inactive
-    const isBlocked = user.isBlocked;
+    const status = user.status;
 
-    if (isBlocked) {
+    if (status === 'block') {
       throw new AppError(403, 'Your account has been blocked!');
     }
 
