@@ -1,7 +1,7 @@
 import mongoose, { Schema, Model } from 'mongoose';
 import { TShippingAddress } from './shippingAddress.interface';
 
-// Define the Mongoose schema
+
 const ShippingAddressSchema: Schema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
