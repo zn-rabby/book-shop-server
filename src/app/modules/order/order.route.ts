@@ -15,6 +15,6 @@ orderRouters.get('/:id', orderController.getSingleOrder);
 
 orderRouters.patch('/:id', orderController.updateOrder);
 
-// productRouters.delete('/:id', productController.deleteProduct);
+orderRouters.delete('/:id', orderController.deleteOrder);
 
 export default orderRouters;

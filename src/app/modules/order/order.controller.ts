@@ -55,9 +55,23 @@ const updateOrder = catchAsync(async (req, res) => {
   });
 });
 
+const deleteOrder = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  // const userEmail = req?.user?.email;
+  await orderService.deleteOrder(id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Order deleted successfully',
+    data: {},
+  });
+});
+
 export const orderController = {
   createOrder,
   getAllOrder,
   getSingleOrder,
   updateOrder,
+  deleteOrder,
 };
