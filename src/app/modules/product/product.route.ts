@@ -17,6 +17,6 @@ productRouters.get('/:id', productController.getSingleProduct);
 
 productRouters.patch('/:id', productController.updateProduct);
 
-productRouters.delete('/:id', productController.updateProduct);
+productRouters.delete('/:id', productController.deleteProduct);
 
 export default productRouters;

@@ -1,6 +1,6 @@
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
-import User from '../user/user.model';
+// import User from '../user/user.model';
 import { blogSearchableFields } from './product.constant';
 import { TProduct } from './product.interface';
 import Product from './product.model';
@@ -69,19 +69,19 @@ const updateProduct = async (id: string, payload: Partial<TProduct>) => {
   return result;
 };
 
-const deleteProduct = async (id: string, userEmail: string) => {
+const deleteProduct = async (id: string) => {
   // check user is exists
-  const user = await User.isUserExists(userEmail);
+  // const user = await User.isUserExists(userEmail);
 
-  if (!user) {
-    throw new AppError(403, 'User not found! You cannot delete the blog.');
-  }
+  // if (!user) {
+  //   throw new AppError(403, 'User not found! You cannot delete the blog.');
+  // }
 
   // check blog is exists
   const product = await Product.findById(id);
 
   if (!product) {
-    throw new AppError(404, 'Blog not found!');
+    throw new AppError(404, 'product not found!');
   }
 
   // check owner
