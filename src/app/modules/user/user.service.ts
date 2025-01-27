@@ -35,8 +35,11 @@ const userRoleUpdate = async (userId: string, payload: Partial<IUser>) => {
     throw new AppError(404, 'User not found!');
   }
 
+  // if (user?.role !== 'user') {
+  //   throw new AppError(403, 'Only user roles can be blocked!');
+  // }
   if (user?.role !== 'user') {
-    throw new AppError(403, 'Only user roles can be blocked!');
+    throw new AppError(403, 'Only user roles can be changed!');
   }
 
   const result = await User.findByIdAndUpdate(userId, payload, {
@@ -46,6 +49,7 @@ const userRoleUpdate = async (userId: string, payload: Partial<IUser>) => {
 
   return result;
 };
+
 const userStatusUpdate = async (userId: string, payload: Partial<IUser>) => {
   // check user is exits
   const user = await User.findOne({ _id: userId });
@@ -55,7 +59,7 @@ const userStatusUpdate = async (userId: string, payload: Partial<IUser>) => {
   }
 
   if (user?.role !== 'user') {
-    throw new AppError(403, 'Only user roles can be blocked!');
+    throw new AppError(403, 'Only user status can be blocked!');
   }
 
   const result = await User.findByIdAndUpdate(userId, payload, {

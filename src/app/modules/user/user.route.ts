@@ -1,17 +1,39 @@
 import { Router } from 'express';
 import { userController } from './user.controller';
+import auth from '../../middleware/auth';
+import { USER_ROLE } from './user.constant';
 const userRoutes = Router();
 
-userRoutes.get('/users', userController.getAllUsers);
+userRoutes.get('/users', auth(USER_ROLE.admin), userController.getAllUsers);
 
-userRoutes.get('/users/:userId', userController.getSingleUsers);
+userRoutes.get(
+  '/users/:userId',
+  auth(USER_ROLE.admin),
+  userController.getSingleUsers,
+);
 
-userRoutes.patch('/role/:userId', userController.userRoleUpdate);
+userRoutes.patch(
+  '/role/:userId',
+  auth(USER_ROLE.admin),
+  userController.userRoleUpdate,
+);
 
-userRoutes.patch('/status/:userId', userController.userStatusUpdate);
+userRoutes.patch(
+  '/status/:userId',
+  auth(USER_ROLE.admin),
+  userController.userStatusUpdate,
+);
 
-userRoutes.patch('/update/:userId', userController.userUpdate);
+userRoutes.patch(
+  '/update/:userId',
+  auth(USER_ROLE.admin),
+  userController.userUpdate,
+);
 
-userRoutes.delete('/delete/:userId', userController.deleteUser);
+userRoutes.delete(
+  '/delete/:userId',
+  auth(USER_ROLE.admin),
+  userController.deleteUser,
+);
 
 export default userRoutes;

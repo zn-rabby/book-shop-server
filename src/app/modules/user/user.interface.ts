@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { USER_ROLE } from './user.constant';
 
 export interface IUser extends Document {
-  // _id: Types.ObjectId;
   name: string;
   email: string;
   password: string;
