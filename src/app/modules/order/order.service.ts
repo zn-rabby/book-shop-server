@@ -1,21 +1,32 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import QueryBuilder from '../../builder/QueryBuilder';
+import config from '../../config';
 import AppError from '../../errors/AppError';
 import Product from '../product/product.model';
+import User from '../user/user.model';
 import { orderSearchableFields } from './order.constant';
 import { TOrder } from './order.interface';
 import { Order } from './order.model';
+import { generateTransactionId } from './order.utils';
+import { SSLCommerzService } from './sslcommerz.service';
 
-const createOrder = async (payload: TOrder) => {
-  //   const user = await User.isUserExists(userEmail);
-  //   if (!user) {
-  //     throw new AppError(404, 'User not found!');
-  //   }
-  //   const userId = user?._id;
+const createOrder = async (payload: TOrder, userEmail: string) => {
+  const user = await User.isUserExists(userEmail);
+  if (!user) {
+    throw new AppError(404, 'User not found!');
+  }
 
-  //   const productData = { ...payload, author: userId };
+  if (user.status === 'block') {
+    throw new AppError(
+      403,
+      'Your account has been block!.you can not create order',
+    );
+  }
 
-  //   const result = await Product.create(productData);
-  //   return result;
+  // set user id
+  payload.userId = user._id;
 
   const { product: productId, quantity } = payload;
 
@@ -26,6 +37,12 @@ const createOrder = async (payload: TOrder) => {
       status: false,
       message: 'Product not found',
     };
+  }
+  const products = await Product.findOne({ _id: payload.product });
+
+  // check if product is exists
+  if (!products) {
+    throw new AppError(404, 'No product found with ID');
   }
 
   // Check if sufficient stock is available
@@ -44,11 +61,78 @@ const createOrder = async (payload: TOrder) => {
     { new: true },
   );
   const totalAmount = product.price * quantity;
-  //   console.log(totalAmount);
-  const updatedData = { ...payload, totalAmount };
-  const result = await Order.create(updatedData);
+  // total amount of product
+  payload.totalAmount = totalAmount;
+ 
+  // payment method integration
+  // if payment method is sslCommerz, initiate the payment
+  if (payload.paymentMethod === 'sslCommerz') {
+    const transactionId = generateTransactionId();
 
-  return result;
+    try {
+      const paymentResponse = await SSLCommerzService.initiatePayment({
+        total_amount: totalAmount,
+        currency: 'BDT',
+        tran_id: transactionId,
+        success_url: (config.success_url as string) || '',
+        fail_url: (config.fail_url as string) || '',
+        cancel_url: (config.cancel_url as string) || '',
+        shipping_method: 'Courier',
+        product_name: product.title || '',
+        product_category: product.category || '',
+        product_profile: 'general',
+        cus_name: user.name || 'Unknown',
+        cus_email: user.email || 'customer@example.com',
+        cus_add1: 'Dhaka',
+        cus_add2: 'Dhaka',
+        cus_city: 'Dhaka',
+        cus_state: 'Dhaka',
+        cus_postcode: '1000',
+        cus_country: 'Bangladesh',
+        cus_phone: '01711111111',
+        cus_fax: '01711111111',
+        ship_name: 'Customer Name',
+        ship_add1: 'Dhaka',
+        ship_add2: 'Dhaka',
+        ship_city: 'Dhaka',
+        ship_state: 'Dhaka',
+        ship_postcode: 1000,
+        ship_country: 'Bangladesh',
+      });
+
+      payload.transactionId = transactionId;
+
+      const createdOrder = await Order.create({
+        ...payload,
+      });
+
+      // decrease product quantity after creating the order
+      await Product.findOneAndUpdate(
+        { _id: payload.product },
+        { $inc: { quantity: -payload.quantity } },
+      );
+
+      return {
+        createdOrder,
+        paymentUrl: paymentResponse,
+      };
+    } catch (err:any) {
+      throw new AppError(500, 'Failed to initiate payment.');
+    }
+  }
+
+  // create the order
+  const createdOrder = await Order.create({
+    ...payload,
+  });
+
+  // decrease product quantity after creating the order
+  await Product.findOneAndUpdate(
+    { _id: payload.product },
+    { $inc: { quantity: -payload.quantity } },
+  );
+
+  return { createdOrder, paymentUrl: '' };
 };
 
 const getAllOrder = async (query: Record<string, unknown>) => {
@@ -76,7 +160,6 @@ const getSingleOrder = async (id: string) => {
 };
 
 const updateOrder = async (id: string, payload: Partial<TOrder>) => {
-
   const order = await Order.findById({ _id: id });
 
   if (!order) {

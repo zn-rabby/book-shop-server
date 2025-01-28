@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import config from '../../config';
 const userSchema = new Schema<IUser>(
   {
+    // _id: Types.ObjectId,
     name: {
       type: String,
       required: [true, 'Please provide your name'],
@@ -58,7 +59,7 @@ userSchema.pre('save', async function (next) {
 userSchema.statics.isUserExists = async function (email: string) {
   return await User.findOne({ email: email }).select('+password');
 };
-   
+
 userSchema.statics.isPasswordMatch = async function (
   plainTextPassword,
   hashPassword,
