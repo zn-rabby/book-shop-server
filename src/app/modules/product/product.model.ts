@@ -4,6 +4,7 @@ import { TProduct } from './product.interface';
 
 const ProductSchema: Schema = new Schema(
   {
+    name: { type: String, required: true },
     title: { type: String, required: true },
     category: { type: String, required: true },
     author: { type: String, required: true },

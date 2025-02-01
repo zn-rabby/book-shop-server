@@ -1,4 +1,5 @@
 export interface TProduct {
+  name: string;
   title: string;
   category: string;
   author: string;

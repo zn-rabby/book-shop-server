@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 const createProductValidationSchema = z.object({
   body: z.object({
+    name: z.string().nonempty('Title is required'),
     title: z.string().nonempty('Title is required'),
     category: z.string().nonempty('Category is required'),
     author: z.string().nonempty('Author is required'),
@@ -21,6 +22,7 @@ const createProductValidationSchema = z.object({
 
 const updateProductValidationSchema = z.object({
   body: z.object({
+    name: z.string().nonempty('Title is required').optional(),
     title: z.string().nonempty('Title is required').optional(),
     category: z.string().nonempty('Category is required').optional(),
     author: z.string().nonempty('Author is required').optional(),
