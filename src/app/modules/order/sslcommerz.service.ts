@@ -16,9 +16,6 @@ const initiatePayment = async (paymentData: TPaymentResponse) => {
   try {
     const apiResponse = await sslcz.init({
       ...paymentData,
-      success_url: config.success_url,
-      fail_url: config.fail_url,
-      cancel_url: config.cancel_url,
     });
 
     return apiResponse.GatewayPageURL;

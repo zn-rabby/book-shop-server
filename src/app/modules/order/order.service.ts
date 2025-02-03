@@ -74,9 +74,9 @@ const createOrder = async (payload: TOrder, userEmail: string) => {
         total_amount: totalAmount,
         currency: 'BDT',
         tran_id: transactionId,
-        success_url: (config.success_url as string) || '',
-        fail_url: (config.fail_url as string) || '',
-        cancel_url: (config.cancel_url as string) || '',
+        success_url: `http://localhost:5000/api/order/pay-success/${transactionId}`,
+        fail_url: '',
+        cancel_url: '',
         shipping_method: 'Courier',
         product_name: product.title || '',
         product_category: product.category || '',
@@ -136,22 +136,27 @@ const createOrder = async (payload: TOrder, userEmail: string) => {
 };
 
 const getAllOrder = async (query: Record<string, unknown>) => {
-  const blogQuery = new QueryBuilder(
+  const orderQuery = new QueryBuilder(
     Order.find().populate('userId').populate('product'),
     query,
   )
     .search(orderSearchableFields)
     .filter()
+    .paginate()
     .sort();
 
-  const result = await blogQuery.modelQuery;
+  const meta = await orderQuery.countTotal();
+  const result = await orderQuery.modelQuery;
 
   // check no product found
   if (!result.length) {
     throw new AppError(404, 'No product found!');
   }
 
-  return result;
+  return {
+    meta,
+    result,
+  };
 };
 
 const getSingleOrder = async (id: string) => {
@@ -185,10 +190,57 @@ const deleteOrder = async (id: string) => {
   return result;
 };
 
+const getUserOrdersHistory = async (
+  loggedInUserEmail: string,
+  requestedUserEmail: string,
+  query: Record<string, unknown>,
+) => {
+  if (loggedInUserEmail !== requestedUserEmail) {
+    throw new AppError(
+      403,
+      'You are not authorized to view this order history',
+    );
+  }
+
+  const user = await User.isUserExists(loggedInUserEmail);
+
+  // check if user is exits
+  if (!user) {
+    throw new AppError(404, 'User not found');
+  }
+
+  // check if user is banned
+  if (user.status === 'block') {
+    throw new AppError(
+      403,
+      'Your account has been banned, and access is restricted.',
+    );
+  }
+
+  const userOrderQuery = new QueryBuilder(
+    Order.find({ userId: user._id }).populate('userId'),
+    query,
+  );
+
+  // const userOrders = await Order.find({ userId: user._id }).populate('userId');
+  const meta = await userOrderQuery.countTotal();
+  const result = await userOrderQuery.modelQuery;
+
+  if (!result || result.length === 0) {
+    throw new AppError(404, 'No order were found this user');
+  }
+
+  return {
+    meta,
+    result,
+  };
+};
+
 export const orderService = {
   createOrder,
   getAllOrder,
   getSingleOrder,
   updateOrder,
   deleteOrder,
+  getUserOrdersHistory,
 };
