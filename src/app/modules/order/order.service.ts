@@ -63,7 +63,7 @@ const createOrder = async (payload: TOrder, userEmail: string) => {
   const totalAmount = product.price * quantity;
   // total amount of product
   payload.totalAmount = totalAmount;
- 
+
   // payment method integration
   // if payment method is sslCommerz, initiate the payment
   if (payload.paymentMethod === 'sslCommerz') {
@@ -116,7 +116,7 @@ const createOrder = async (payload: TOrder, userEmail: string) => {
         createdOrder,
         paymentUrl: paymentResponse,
       };
-    } catch (err:any) {
+    } catch (err: any) {
       throw new AppError(500, 'Failed to initiate payment.');
     }
   }

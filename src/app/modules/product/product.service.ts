@@ -10,19 +10,23 @@ const createProduct = async (payload: TProduct) => {
 };
 
 const getAllProduct = async (query: Record<string, unknown>) => {
-  const blogQuery = new QueryBuilder(Product.find(), query)
+  const productQuery = new QueryBuilder(Product.find(), query)
     .search(blogSearchableFields)
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  const result = await blogQuery.modelQuery;
+  const meta = await productQuery.countTotal();
+  const result = await productQuery.modelQuery;
 
   if (!result.length) {
     throw new AppError(404, 'No products found!');
   }
-  return result;
+  return {
+    meta,
+    result,
+  };
 };
 
 const getSingleProduct = async (id: string) => {

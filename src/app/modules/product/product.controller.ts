@@ -16,13 +16,15 @@ const createProduct = catchAsync(async (req: Request, res: Response) => {
 
 const getAllProduct = catchAsync(async (req, res) => {
   const query = req.query;
+
   const result = await productService.getAllProduct(query);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: 'Product fetched successfully',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   });
 });
 

@@ -6,12 +6,7 @@ export interface TProduct {
   description: string;
   price: number;
   image: string;
-  publisher: string;
-  publishedDate: Date;
-  language: string;
-  pages: number;
   rating: number;
   quantity: number;
-  isDeleted: boolean;
-  discount?: number;
+  isDeleted?: boolean;
 }

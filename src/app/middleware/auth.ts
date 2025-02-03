@@ -9,18 +9,23 @@ import { IUserRole } from '../modules/user/user.interface';
 
 const auth = (...requiredRoles: IUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
+    const token = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer')) {
-      throw new AppError(401, 'Invalid Credentials');
-    }
+    // // check if token is Bearer or not
+    // if (!authHeader || !authHeader.startsWith('Bearer')) {
+    //   throw new HttpError(
+    //     401,
+    //     'Missing or invalid authorization header. Please ensure the request includes a valid Bearer token',
+    //   );
+    // }
 
-    const token = authHeader.split(' ')[1];
-    // checking if the token is missing
+    // const token = authHeader.split(' ')[1];
+    // console.log(token)
+
     if (!token) {
       throw new AppError(
-        StatusCodes.UNAUTHORIZED,
-        'No authentication token provided. Please login to access this resource.',
+        401,
+        'Access token is missing or invalid. Please provide a valid token to access this resource.',
       );
     }
 

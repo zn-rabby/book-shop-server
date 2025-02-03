@@ -9,14 +9,10 @@ const createProductValidationSchema = z.object({
     description: z.string().nonempty('Description is required'),
     price: z.number().min(0, 'Price must be a positive number'),
     image: z.string().url('Image must be a valid URL'),
-    publisher: z.string().nonempty('Publisher is required'),
-    publishedDate: z.string().optional(),
-    language: z.string().nonempty('Language is required'),
-    pages: z.number().min(1, 'Pages must be at least 1'),
+
     rating: z.number().int().min(1).max(5, 'Rating must be between 0 and 5'),
     quantity: z.number().int().min(0, 'Quantity must be a positive number'),
-    isDeleted: z.boolean().default(false),
-    discount: z.number().int().min(0).max(100).optional(),
+    isDeleted: z.boolean().optional().default(false),
   }),
 });
 
@@ -29,10 +25,7 @@ const updateProductValidationSchema = z.object({
     description: z.string().nonempty('Description is required').optional(),
     price: z.number().min(0, 'Price must be a positive number').optional(),
     image: z.string().url('Image must be a valid URL').optional(),
-    publisher: z.string().nonempty('Publisher is required').optional(),
-    publishedDate: z.string().optional(),
-    language: z.string().nonempty('Language is required').optional(),
-    pages: z.number().min(1, 'Pages must be at least 1').optional(),
+
     rating: z
       .number()
       .int()
@@ -45,7 +38,6 @@ const updateProductValidationSchema = z.object({
       .min(0, 'Quantity must be a positive number')
       .optional(),
     isDeleted: z.boolean().default(false).optional(),
-    discount: z.number().int().min(0).max(100).optional(),
   }),
 });
 
