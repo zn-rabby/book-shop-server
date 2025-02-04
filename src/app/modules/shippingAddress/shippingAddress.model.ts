@@ -1,7 +1,6 @@
 import mongoose, { Schema, Model } from 'mongoose';
 import { TShippingAddress } from './shippingAddress.interface';
 
-
 const ShippingAddressSchema: Schema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User' },

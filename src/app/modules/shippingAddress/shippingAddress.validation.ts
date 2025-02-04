@@ -1,13 +1,12 @@
 import { z } from 'zod';
 
-
 const shippingAddressSchema = z.object({
   body: z.object({
-    userId: z.string().optional(), 
+    userId: z.string().optional(),
     name: z
       .enum(['home', 'office', 'hotel'])
       .refine((value) => ['home', 'office', 'hotel'].includes(value), {
-        message: 'Invalid address type', 
+        message: 'Invalid address type',
       }),
     phone: z
       .string()
@@ -19,10 +18,9 @@ const shippingAddressSchema = z.object({
     country: z
       .string()
       .min(2, 'Country name must be at least 2 characters long'),
-    isDeleted: z.boolean().default(false), 
+    isDeleted: z.boolean().default(false),
   }),
 });
-
 
 export const ShippingAddressValidation = {
   shippingAddressSchema,
