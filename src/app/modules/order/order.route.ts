@@ -40,12 +40,12 @@ orderRouters.post(
 );
 
 orderRouters.post(
-  '/payment-fail/:transactionId',
+  '/pay-fail/:transactionId',
   PaymentControllers.paymentFailController,
 );
 
 orderRouters.post(
-  '/payment-cancel/:transactionId',
+  '/pay-cancel/:transactionId',
   PaymentControllers.paymentCancelController,
 );
 
