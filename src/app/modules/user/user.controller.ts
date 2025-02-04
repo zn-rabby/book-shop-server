@@ -61,7 +61,7 @@ const userUpdate = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: 'User Update successfully',
-    data: {},
+    data: updatedData,
   });
 });
 

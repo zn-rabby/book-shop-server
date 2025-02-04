@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
-// Define Zod validation for Shipping Address
 const ShippingAddressValidationSchema = z.object({
-  userId: z.string().optional(), // Mongo ObjectId is a string type in JavaScript
+  userId: z.string().optional(),
   name: z.enum(['home', 'office', 'hotel']),
   phone: z.string().min(1),
   address: z.string().min(1),
@@ -12,13 +11,21 @@ const ShippingAddressValidationSchema = z.object({
   isDeleted: z.boolean().default(false).optional(),
 });
 
-// Define Zod validation for Order
-const orderValidationSchema = z.object({
-  userId: z.string().optional(), // Mongo ObjectId is a string type in JavaScript
-  product: z.string().min(1), // Mongo ObjectId as string
-  quantity: z.number().int().positive(),
+const createOrderValidationSchema = z.object({
+  userId: z.string().optional(),
+  product: z.string().nonempty('Product is required').optional(),
+  quantity: z
+    .number()
+    .min(1, 'Quantity must be at least 1')
+    .nonnegative('Quantity cannot be negative')
+    .optional(),
   totalAmount: z.number().optional(),
-  paymentMethod: z.enum(['sslCommerz', 'cashOnDelivery']),
+  paymentMethod: z
+    .enum(['sslCommerz', 'cashOnDelivery'])
+    .refine((value) => value, {
+      message: 'Payment method is required',
+    })
+    .optional(),
   paymentStatus: z
     .enum(['pending', 'complete', 'failed', 'canceled'])
     .default('pending'),
@@ -28,6 +35,38 @@ const orderValidationSchema = z.object({
   transactionId: z.string().optional(),
 });
 
+const updateOrderValidationSchema = z.object({
+  userId: z.string().optional(),
+  product: z.string().optional(),
+  quantity: z
+    .number()
+    .min(1, 'Quantity must be at least 1')
+    .nonnegative('Quantity cannot be negative')
+    .optional(),
+  totalAmount: z.number().optional(),
+  paymentMethod: z
+    .enum(['sslCommerz', 'cashOnDelivery'])
+    .refine((value) => value, {
+      message: 'Payment method is required',
+    })
+    .optional(),
+  paymentStatus: z
+    .enum(['pending', 'complete', 'failed', 'canceled'])
+    .default('pending')
+    .optional(),
+  shippingAddress: ShippingAddressValidationSchema.optional(),
+  status: z
+    .enum(['pending', 'shipping', 'delivered'])
+    .default('pending')
+    .optional(),
+  orderDate: z
+    .date()
+    .default(() => new Date())
+    .optional(),
+  transactionId: z.string().optional(),
+});
+
 export const OrderValidation = {
-  orderValidationSchema,
+  createOrderValidationSchema,
+  updateOrderValidationSchema,
 };

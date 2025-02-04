@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
-// Zod validation schema for ShippingAddress
+
 const shippingAddressSchema = z.object({
   body: z.object({
-    userId: z.string().optional(), // Optional userId (string, assuming MongoDB ObjectId as string)
+    userId: z.string().optional(), 
     name: z
       .enum(['home', 'office', 'hotel'])
       .refine((value) => ['home', 'office', 'hotel'].includes(value), {
-        message: 'Invalid address type', // Custom error message
+        message: 'Invalid address type', 
       }),
     phone: z
       .string()
@@ -19,11 +19,11 @@ const shippingAddressSchema = z.object({
     country: z
       .string()
       .min(2, 'Country name must be at least 2 characters long'),
-    isDeleted: z.boolean().default(false), // Optional field, defaults to false
+    isDeleted: z.boolean().default(false), 
   }),
 });
 
-// Export Zod schema for use in validation
+
 export const ShippingAddressValidation = {
   shippingAddressSchema,
 };

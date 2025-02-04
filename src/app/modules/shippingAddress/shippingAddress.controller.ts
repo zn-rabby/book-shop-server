@@ -5,9 +5,6 @@ import { shippingService } from './shippingAddress.service';
 
 const createShippingAddress = catchAsync(
   async (req: Request, res: Response) => {
-    //   const userEmail = req?.user?.email;
-
-    //   const result = await productService.createProduct(req.body, userEmail);
     const result = await shippingService.createShippingAddress(req.body);
 
     sendResponse(res, {
@@ -60,7 +57,6 @@ const updateShippingAddress = catchAsync(
 
 const deleteShippingAddress = catchAsync(async (req, res) => {
   const id = req.params.id;
-  // const userEmail = req?.user?.email;
   await shippingService.deleteShippingAddress(id);
 
   sendResponse(res, {

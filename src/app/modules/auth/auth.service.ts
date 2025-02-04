@@ -22,7 +22,10 @@ const login = async (payload: { email: string; password: string }) => {
   );
 
   if (!user) {
-    throw new AppError(404, 'User is not found!');
+    throw new AppError(
+      404,
+      'User not found! Please check the provided details.',
+    );
   }
 
   const isStatus = user.status; // Assuming isBlocked is boolean
@@ -38,7 +41,10 @@ const login = async (payload: { email: string; password: string }) => {
   );
 
   if (!isPasswordMatched) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials');
+    throw new AppError(
+      StatusCodes.UNAUTHORIZED,
+      'Invalid credentials. Please check your email or password and try again.',
+    );
   }
 
   //create token and sent to the  client

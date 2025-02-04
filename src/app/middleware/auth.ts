@@ -9,17 +9,24 @@ import { IUserRole } from '../modules/user/user.interface';
 
 const auth = (...requiredRoles: IUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
+    const token = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer')) {
-      throw new AppError(401, 'Invalid Credentials');
-    }
+    // // check if token is Bearer or not
+    // if (!authHeader || !authHeader.startsWith('Bearer')) {
+    //   throw new HttpError(
+    //     401,
+    //     'Missing or invalid authorization header. Please ensure the request includes a valid Bearer token',
+    //   );
+    // }
 
-    const token = authHeader.split(' ')[1];
-    // checking if the token is missing
+    // const token = authHeader.split(' ')[1];
+    // console.log(token)
+
     if (!token) {
-      // throw new Error('You are not authorized!');
-      throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials');
+      throw new AppError(
+        401,
+        'Access token is missing or invalid. Please provide a valid token to access this resource.',
+      );
     }
 
     // checking if the given token is valid
@@ -39,10 +46,9 @@ const auth = (...requiredRoles: IUserRole[]) => {
       throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials');
     }
 
-    // checking if the user is inactive
-    const isBlocked = user.isBlocked;
+    const status = user.status;
 
-    if (isBlocked) {
+    if (status === 'block') {
       throw new AppError(403, 'Your account has been blocked!');
     }
 

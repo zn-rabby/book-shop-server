@@ -4,10 +4,10 @@ import { orderService } from './order.service';
 import sendResponse from '../../utils/sendResponse';
 
 const createOrder = catchAsync(async (req: Request, res: Response) => {
-  //   const userEmail = req?.user?.email;
+  const userEmail = req?.user?.email;
 
   //   const result = await productService.createProduct(req.body, userEmail);
-  const result = await orderService.createOrder(req.body);
+  const result = await orderService.createOrder(req.body, userEmail);
 
   sendResponse(res, {
     statusCode: 201,
@@ -25,7 +25,8 @@ const getAllOrder = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: 'Order fetched successfully',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   });
 });
 
@@ -68,10 +69,33 @@ const deleteOrder = catchAsync(async (req, res) => {
   });
 });
 
+const getUserOrdersHistoryController = catchAsync(async (req, res) => {
+  const loggedInUserEmail = req.user.email;
+
+  const requestedUserEmail = req.params.email;
+  const query = req.query;
+
+  // const userEmail = req.user.email;
+  const result = await orderService.getUserOrdersHistory(
+    loggedInUserEmail,
+    requestedUserEmail,
+    query,
+  );
+
+  sendResponse(res, {
+    success: true,
+    message: 'User order history retrieved successfully',
+    statusCode: 200,
+    meta: result.meta,
+    data: result.result,
+  });
+});
+
 export const orderController = {
   createOrder,
   getAllOrder,
   getSingleOrder,
   updateOrder,
   deleteOrder,
+  getUserOrdersHistoryController,
 };
