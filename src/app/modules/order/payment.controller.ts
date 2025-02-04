@@ -1,14 +1,14 @@
 import catchAsync from '../../utils/catchAsync';
 
 const paymentSuccessController = catchAsync(async (req, res) => {
-  res.redirect(`http://localhost:5173/pay-success`);
+  res.redirect(`https://book-shop-client-seven.vercel.app/pay-success`);
 });
 
 const paymentFailController = catchAsync(async (req, res) => {
-  res.redirect(`http://localhost:5173/pay-fail`);
+  res.redirect(`https://book-shop-client-seven.vercel.app/pay-fail`);
 });
 const paymentCancelController = catchAsync(async (req, res) => {
-  res.redirect(`http://localhost:5173/pay-cancel`);
+  res.redirect(`https://book-shop-client-seven.vercel.app/pay-cancel`);
 });
 
 export const PaymentControllers = {
