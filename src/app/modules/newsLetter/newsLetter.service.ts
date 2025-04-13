@@ -1,4 +1,3 @@
-
 import AppError from '../../errors/AppError';
 import { INewsLetter } from './newsLetter.interface';
 import { NewsLetter } from './newsLetter.model';
