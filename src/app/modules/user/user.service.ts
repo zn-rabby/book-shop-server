@@ -27,6 +27,17 @@ const getSingleUsers = async (id: string) => {
   return user;
 };
 
+const myProfile = async (email: string) => {
+  // Find the user by email and exclude the password field
+  const user = await User.findOne({ email }).select('-password');
+
+  if (!user) {
+    throw new AppError(404, 'User not found!');
+  }
+
+  return { user };
+};
+
 const userRoleUpdate = async (userId: string, payload: Partial<IUser>) => {
   // check user is exits
   const user = await User.findOne({ _id: userId });
@@ -86,6 +97,22 @@ const userUpdate = async (userId: string, payload: Partial<IUser>) => {
   return result;
 };
 
+const updateUser = async (id: string, payload: Partial<IUser>) => {
+  // check blog is exists
+  const product = await User.findById({ _id: id });
+
+  if (!product) {
+    throw new AppError(404, 'User not found!');
+  }
+
+  const result = await User.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
+
 const deleteUser = async (id: string) => {
   const result = await User.findByIdAndDelete(id);
   return result;
@@ -94,8 +121,10 @@ const deleteUser = async (id: string) => {
 export const userService = {
   getAllUsers,
   getSingleUsers,
+  myProfile,
   userRoleUpdate,
   userStatusUpdate,
   userUpdate,
   deleteUser,
+  updateUser,
 };

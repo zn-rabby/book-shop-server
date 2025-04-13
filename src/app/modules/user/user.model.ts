@@ -42,6 +42,45 @@ const userSchema = new Schema<IUser>(
       },
       default: 'active',
     },
+    // profile update related additional fields
+    profilePicture: {
+      type: String,
+    },
+    city: {
+      type: String,
+      trim: true,
+    },
+    address: {
+      type: String,
+      trim: true,
+    },
+    postalCode: {
+      type: String,
+      trim: true,
+    },
+    country: {
+      type: String,
+      trim: true,
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ['male', 'female'],
+        message: '{VALUE} is not a valid gender',
+      },
+    },
+    bio: {
+      type: String,
+      trim: true,
+    },
+    facebook: {
+      type: String,
+      trim: true,
+    },
+    website: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,

@@ -26,6 +26,32 @@ const getSingleUsers = catchAsync(async (req, res) => {
   });
 });
 
+const myProfile = catchAsync(async (req, res) => {
+  const { email } = req.user; // Ensure `auth` middleware attaches the user's email to `req.user`
+  const result = await userService.myProfile(email);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Profile retrieved successfully',
+    data: result,
+  });
+});
+
+const updateUser = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const updatedData = req.body;
+
+  const result = await userService.updateUser(id, updatedData);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Listing updated successfully',
+    data: result,
+  });
+});
+
 const userRoleUpdate = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const updatedData = req.body;
@@ -78,9 +104,11 @@ const deleteUser = catchAsync(async (req, res) => {
 });
 export const userController = {
   getAllUsers,
+  myProfile,
   getSingleUsers,
   userRoleUpdate,
   userStatusUpdate,
   userUpdate,
   deleteUser,
+  updateUser,
 };

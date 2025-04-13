@@ -12,6 +12,12 @@ userRoutes.get(
   userController.getSingleUsers,
 );
 
+userRoutes.get(
+  '/me',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  userController.myProfile,
+);
+
 userRoutes.patch(
   '/role/:userId',
   auth(USER_ROLE.admin),
@@ -28,6 +34,12 @@ userRoutes.patch(
   '/update/:userId',
   auth(USER_ROLE.admin),
   userController.userUpdate,
+);
+
+userRoutes.patch(
+  '/:id',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  userController.updateUser,
 );
 
 userRoutes.delete(

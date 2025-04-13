@@ -5,7 +5,27 @@ const ProductSchema: Schema = new Schema(
   {
     name: { type: String, required: true },
     title: { type: String, required: true },
-    category: { type: String, required: true },
+    category: {
+      type: String,
+      enum: {
+        values: [
+          'fiction',
+          'children',
+          'science',
+          'religion',
+          'history',
+          'biography',
+          'romance',
+          'mystery',
+          'selfHelp',
+          'politics',
+          'business',
+          'education',
+        ],
+        message: '{VALUE} is not valid category',
+      },
+      required: true,
+    },
     author: { type: String, required: true },
     description: { type: String, required: true },
     price: { type: Number, required: true },

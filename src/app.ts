@@ -13,7 +13,10 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ['https://book-shop-client-seven.vercel.app'],
+    origin: [
+      'https://book-shop-client-seven.vercel.app',
+      'http://localhost:5173',
+    ],
     credentials: true,
   }),
 );
