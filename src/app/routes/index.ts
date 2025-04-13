@@ -4,6 +4,9 @@ import authRoutes from '../modules/auth/auth.route';
 import productRouters from '../modules/product/product.route';
 import shippingRouters from '../modules/shippingAddress/shippingAddress.route';
 import orderRouters from '../modules/order/order.route';
+import ContactRouters from '../modules/contact/contact.route';
+import { NewsLetterRoutes } from '../modules/newsLetter/newsLetter.route';
+import { AnalyticsRoutes } from '../modules/analytics/analytics.route';
 const router = Router();
 const moduleRoutes = [
   {
@@ -25,6 +28,18 @@ const moduleRoutes = [
   {
     path: '/order',
     route: orderRouters,
+  },
+  {
+    path: '/contacts',
+    route: ContactRouters,
+  },
+  {
+    path: '/newsletters',
+    route: NewsLetterRoutes,
+  },
+  {
+    path: '/analytics',
+    route: AnalyticsRoutes,
   },
 ];
 
